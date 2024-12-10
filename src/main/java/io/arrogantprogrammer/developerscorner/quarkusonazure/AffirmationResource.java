@@ -1,5 +1,6 @@
 package io.arrogantprogrammer.developerscorner.quarkusonazure;
 
+import io.quarkus.logging.Log;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
@@ -16,6 +17,8 @@ public class AffirmationResource {
 
     @GET
     public Affirmation affirmation() {
-        return new Affirmation("You are awesome!", "Motivation Jane");
+        Affirmation affirmation = Affirmation.randomAffirmation();
+        Log.debugf("Returning affirmation: %s", affirmation);
+        return affirmation;
     }
 }

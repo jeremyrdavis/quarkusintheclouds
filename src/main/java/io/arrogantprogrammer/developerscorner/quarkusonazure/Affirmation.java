@@ -32,6 +32,9 @@ public class Affirmation {
         return affirmationList;
     }
 
+    public static Affirmation randomAffirmation() {
+        return affirmationList.get((int) (Math.random() * affirmationList.size()));
+    }
     public static List<String> getAffirmations() {
         return affirmationList.stream().map(affirmation -> affirmation.getAffirmation()).toList();
     }
