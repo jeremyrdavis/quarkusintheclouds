@@ -1,4 +1,4 @@
-package io.arrogantprogrammer.developerscorner.quarkusonazure;
+package io.arrogantprogrammer.developerscorner.quarkusintheclouds;
 
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.path.json.JsonPath;

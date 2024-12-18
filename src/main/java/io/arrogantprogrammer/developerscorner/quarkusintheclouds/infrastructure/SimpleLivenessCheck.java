@@ -1,4 +1,4 @@
-package io.arrogantprogrammer.developerscorner.quarkusonazure.infrastructure;
+package io.arrogantprogrammer.developerscorner.quarkusintheclouds.infrastructure;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import org.eclipse.microprofile.health.HealthCheck;

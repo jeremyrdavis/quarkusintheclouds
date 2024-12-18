@@ -1,4 +1,4 @@
-package io.arrogantprogrammer.developerscorner.quarkusonazure;
+package io.arrogantprogrammer.developerscorner.quarkusintheclouds;
 
 import io.quarkus.logging.Log;
 import jakarta.ws.rs.Consumes;
@@ -6,9 +6,6 @@ import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Path("/affirmation")
 @Consumes(MediaType.APPLICATION_JSON)

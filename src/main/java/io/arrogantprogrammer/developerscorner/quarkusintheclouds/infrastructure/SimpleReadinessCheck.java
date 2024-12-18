@@ -1,6 +1,6 @@
-package io.arrogantprogrammer.developerscorner.quarkusonazure.infrastructure;
+package io.arrogantprogrammer.developerscorner.quarkusintheclouds.infrastructure;
 
-import io.arrogantprogrammer.developerscorner.quarkusonazure.Affirmation;
+import io.arrogantprogrammer.developerscorner.quarkusintheclouds.Affirmation;
 import jakarta.enterprise.context.ApplicationScoped;
 import org.eclipse.microprofile.health.HealthCheck;
 import org.eclipse.microprofile.health.HealthCheckResponse;

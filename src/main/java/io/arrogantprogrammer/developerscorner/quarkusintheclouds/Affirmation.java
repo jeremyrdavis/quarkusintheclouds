@@ -1,4 +1,4 @@
-package io.arrogantprogrammer.developerscorner.quarkusonazure;
+package io.arrogantprogrammer.developerscorner.quarkusintheclouds;
 
 import java.util.ArrayList;
 import java.util.List;
