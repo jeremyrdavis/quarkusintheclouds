@@ -7,6 +7,9 @@ If you want to learn more about Quarkus, please visit its website: <https://quar
 ## App Configuration
 Set up the Azure infrastructure following these instructions:https://docs.quarkiverse.io/quarkus-azure-services/dev/quarkus-azure-app-configuration.html
 
+## CosmosDB
+Set up CosmosDB following these instructions:https://docs.quarkiverse.io/quarkus-azure-services/dev/quarkus-azure-cosmosdb.html
+
 ## Running the application in dev mode
 
 You can run your application in dev mode that enables live coding using:
