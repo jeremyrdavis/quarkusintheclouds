@@ -4,6 +4,9 @@ This project uses Quarkus, the Supersonic Subatomic Java Framework.
 
 If you want to learn more about Quarkus, please visit its website: <https://quarkus.io/>.
 
+## App Configuration
+Set up the Azure infrastructure following these instructions:https://docs.quarkiverse.io/quarkus-azure-services/dev/quarkus-azure-app-configuration.html
+
 ## Running the application in dev mode
 
 You can run your application in dev mode that enables live coding using:
