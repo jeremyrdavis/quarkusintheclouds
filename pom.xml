@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>io.arrogantprogrammer.developerscorner.quarkusonazure</groupId>
     <artifactId>quarkusintheclouds</artifactId>
-    <version>5.0</version>
+    <version>6.0</version>
 
     <properties>
         <compiler-plugin.version>3.13.0</compiler-plugin.version>
@@ -33,6 +33,11 @@
 
     <dependencies>
         <!--- Azure dependencies -->
+        <dependency>
+            <groupId>io.quarkiverse.azureservices</groupId>
+            <artifactId>quarkus-azure-eventhubs</artifactId>
+            <version>1.0.9</version>
+        </dependency>
         <dependency>
             <groupId>io.quarkiverse.azureservices</groupId>
             <artifactId>quarkus-azure-app-configuration</artifactId>

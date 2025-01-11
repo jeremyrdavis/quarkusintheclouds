@@ -10,6 +10,9 @@ Set up the Azure infrastructure following these instructions:https://docs.quarki
 ## CosmosDB
 Set up CosmosDB following these instructions:https://docs.quarkiverse.io/quarkus-azure-services/dev/quarkus-azure-cosmosdb.html
 
+## Event Hubs
+Set up Event Hubs infrastrcutre following these instructions: https://docs.quarkiverse.io/quarkus-azure-services/dev/quarkus-azure-eventhubs.html
+
 ## Running the application in dev mode
 
 You can run your application in dev mode that enables live coding using:
