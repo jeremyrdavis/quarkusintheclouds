@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>io.arrogantprogrammer.developerscorner.quarkusonazure</groupId>
     <artifactId>quarkusintheclouds</artifactId>
-    <version>6.0</version>
+    <version>7.0</version>
 
     <properties>
         <compiler-plugin.version>3.13.0</compiler-plugin.version>
@@ -17,6 +17,8 @@
         <surefire-plugin.version>3.5.0</surefire-plugin.version>
         <azure.app-configuration.version>1.0.9</azure.app-configuration.version>
         <azure.cosmos.version>1.0.9</azure.cosmos.version>
+        <azure.eventhubs.version>1.0.9</azure.eventhubs.version>
+        <azure.key-vault.version>1.0.9</azure.key-vault.version>
     </properties>
 
     <dependencyManagement>
@@ -35,8 +37,13 @@
         <!--- Azure dependencies -->
         <dependency>
             <groupId>io.quarkiverse.azureservices</groupId>
+            <artifactId>quarkus-azure-keyvault</artifactId>
+            <version>${azure.key-vault.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.quarkiverse.azureservices</groupId>
             <artifactId>quarkus-azure-eventhubs</artifactId>
-            <version>1.0.9</version>
+            <version>${azure.eventhubs.version}</version>
         </dependency>
         <dependency>
             <groupId>io.quarkiverse.azureservices</groupId>
