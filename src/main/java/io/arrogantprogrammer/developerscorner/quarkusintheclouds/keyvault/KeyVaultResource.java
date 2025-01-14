@@ -8,7 +8,7 @@ import org.eclipse.microprofile.config.inject.ConfigProperty;
 @Path("/keyvault")
 public class KeyVaultResource {
 
-    @ConfigProperty(name = "kv//secret1")
+    @ConfigProperty(name = "kv//secret2")
     String secret;
 
     @GET

@@ -17,8 +17,8 @@ export COSMOS_CONTAINER_NAME=quarkuscontainer \
 export EVENTHUBS_NAMESPACE=quarkuseventhubnamespace \
 export EVENTHUBS_NAME=quarkuseventhub \
 export KEYVAULT_NAME=quarkusazurekeyvault \
-export KEYVUALT_SECRET_NAME=secret1 \
-export KEYVAULT_SECRET_VALUE=mysecret \
+export KEYVUALT_SECRET_NAME=secret2 \
+export KEYVAULT_SECRET_VALUE=myothersecret \
 export BLOB_STORAGE_NAME=quarkusblob
 
 echo $AZURE_RESOURCE_GROUP \
