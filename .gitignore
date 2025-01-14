@@ -43,3 +43,8 @@ nb-configuration.xml
 /.quarkus/cli/plugins/
 # TLS Certificates
 .certs/
+
+# Terraform
+.terraform/
+.terraform.lock.hcl
+terraform.tfstate
