@@ -18,7 +18,8 @@ export EVENTHUBS_NAMESPACE=quarkuseventhubnamespace \
 export EVENTHUBS_NAME=quarkuseventhub \
 export KEYVAULT_NAME=quarkusazurekeyvault \
 export KEYVUALT_SECRET_NAME=secret1 \
-export KEYVAULT_SECRET_VALUE=mysecret
+export KEYVAULT_SECRET_VALUE=mysecret \
+export BLOB_STORAGE_NAME=quarkusblob
 
 echo $AZURE_RESOURCE_GROUP \
 echo $LOCATION $REGION_NAME \
@@ -42,9 +43,34 @@ az appconfig create \
     --resource-group $AZURE_RESOURCE_GROUP \
     --location $LOCATION
     
-az appconfig kv set --name $AZURE_APP_CONFIG --yes --key myKeyOne --value "Value 1"
-az appconfig kv set --name $AZURE_APP_CONFIG --yes --key myKeyTwo --value "Value 2"
+az appconfig kv set --name $AZURE_APP_CONFIG --yes --key myKeyOne --value "Tuesday" \
+az appconfig kv set --name $AZURE_APP_CONFIG --yes --key myKeyTwo --value "Morning" \
 az appconfig kv list --name $AZURE_APP_CONFIG
+
+export QUARKUS_AZURE_APP_CONFIGURATION_ENDPOINT=$(az appconfig show \
+  --resource-group $AZURE_RESOURCE_GROUP \
+  --name $AZURE_APP_CONFIG \
+  --query endpoint -o tsv)
+  
+ # Retrieve the app configuration resource ID
+APP_CONFIGURATION_RESOURCE_ID=$(az appconfig show \
+    --resource-group $AZURE_RESOURCE_GROUP \
+    --name $AZURE_APP_CONFIG \
+    --query 'id' \
+    --output tsv)
+# Assign the "App Configuration Data Reader" role to the current signed-in identity
+az role assignment create \
+    --assignee $(az ad signed-in-user show --query 'id' --output tsv) \
+    --role "App Configuration Data Reader" \
+    --scope $APP_CONFIGURATION_RESOURCE_ID
+
+credential=$(az appconfig credential list \
+    --name $AZURE_APP_CONFIG \
+    --resource-group $AZURE_RESOURCE_GROUP \
+    | jq 'map(select(.readOnly == true)) | .[0]')
+export QUARKUS_AZURE_APP_CONFIGURATION_ID=$(echo "${credential}" | jq -r '.id')
+export QUARKUS_AZURE_APP_CONFIGURATION_SECRET=$(echo "${credential}" | jq -r '.value')    
+    
 
 # CosmosDB
 # Create the account
@@ -130,22 +156,41 @@ export QUARKUS_AZURE_KEYVAULT_SECRET_ENDPOINT=$(az keyvault show --name $KEYVAUL
     --resource-group $AZURE_RESOURCE_GROUP \
     --query properties.vaultUri \
     --output tsv)
+    
+# Blob Storage
+az storage account create \
+    --name $BLOB_STORAGE_NAME \
+    --resource-group $AZURE_RESOURCE_GROUP \
+    --location $LOCATION \
+    --sku Standard_ZRS \
+    --encryption-services blob
+
+# Retrieve the storage account resource ID
+STORAGE_ACCOUNT_RESOURCE_ID=$(az storage account show \
+    --resource-group $AZURE_RESOURCE_GROUP \
+    --name $BLOB_STORAGE_NAME \
+    --query 'id' \
+    --output tsv)
+
+# Assign the "Storage Blob Data Contributor" role to the current signed-in identity
+az role assignment create \
+    --assignee $(az ad signed-in-user show --query 'id' --output tsv) \
+    --role "Storage Blob Data Contributor" \
+    --scope $STORAGE_ACCOUNT_RESOURCE_ID
+
+export QUARKUS_AZURE_STORAGE_BLOB_ENDPOINT=$(az storage account show \
+    --resource-group $AZURE_RESOURCE_GROUP \
+    --name $BLOB_STORAGE_NAME \
+    --query 'primaryEndpoints.blob' \
+    --output tsv)
+echo "QUARKUS_AZURE_STORAGE_BLOB_ENDPOINT is: ${QUARKUS_AZURE_STORAGE_BLOB_ENDPOINT}"
+
+export QUARKUS_AZURE_STORAGE_BLOB_CONNECTION_STRING=$(az storage account show-connection-string \
+    --resource-group $AZURE_RESOURCE_GROUP \
+    --name $BLOB_STORAGE_NAME \
+    --output tsv)
+echo "QUARKUS_AZURE_STORAGE_BLOB_CONNECTION_STRING is: ${QUARKUS_AZURE_STORAGE_BLOB_CONNECTION_STRING}"
 ```
-## App Configuration
-Set up the Azure infrastructure following these instructions:https://docs.quarkiverse.io/quarkus-azure-services/dev/quarkus-azure-app-configuration.html
-
-## Blob Storage
-Set up Blob Storage following these instructions:https://docs.quarkiverse.io/quarkus-azure-services/dev/quarkus-azure-storage-blob.html
-
-## CosmosDB
-Set up CosmosDB following these instructions:https://docs.quarkiverse.io/quarkus-azure-services/dev/quarkus-azure-cosmosdb.html
-
-## Event Hubs
-Set up Event Hubs infrastrcutre following these instructions: https://docs.quarkiverse.io/quarkus-azure-services/dev/quarkus-azure-eventhubs.html
-
-## Key Vault
-Set up Key Vault infrastructure following these instructions: https://docs.quarkiverse.io/quarkus-azure-services/dev/quarkus-azure-key-vault.html
-
 ## Running the application in dev mode
 
 You can run your application in dev mode that enables live coding using:
@@ -153,6 +198,10 @@ You can run your application in dev mode that enables live coding using:
 ```shell script
 ./mvnw compile quarkus:dev
 ```
+
+## Endpoints
+http://localhost:8080/keyvault
+
 
 > **_NOTE:_**  Quarkus now ships with a Dev UI, which is available in dev mode only at <http://localhost:8080/q/dev/>.
 
