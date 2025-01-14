@@ -4,6 +4,106 @@ This project uses Quarkus, the Supersonic Subatomic Java Framework.
 
 If you want to learn more about Quarkus, please visit its website: <https://quarkus.io/>.
 
+## Azure Set Up
+
+```bash
+export AZURE_RESOURCE_GROUP=rg-quarkus-in-azure-demo
+export LOCATION=eastus
+export REGION_NAME='East US'
+export AZURE_APP_CONFIG=quarkus-azure-app-config
+export COSMOS_ACCOUNT=quarkuscosmosaccount
+export COSMOS_DB_NAME=quarkuscosmosdb
+export COSMOS_CONTAINER_NAME=quarkuscosmoscontainer
+export EVENTHUBS_NAMESPACE=quarkuseventhubnamespace
+export EVENTHUBS_NAME=quarkuseventhub
+
+echo $AZURE_RESOURCE_GROUP $LOCATION $REGION_NAME $COSMOS_DB_NAME $COSMOS_CONTAINER_NAME $EVENTHUBS_NAMESPACE $EVENTHUBS_NAME
+
+
+
+# App Config
+az group create \
+    --name $AZURE_RESOURCE_GROUP \
+    --location eastus
+    
+az appconfig create \
+    --name $AZURE_APP_CONFIG \
+    --resource-group $AZURE_RESOURCE_GROUP \
+    --location $LOCATION
+    
+az appconfig kv set --name $AZURE_APP_CONFIG --yes --key myKeyOne --value "Value 1"
+az appconfig kv set --name $AZURE_APP_CONFIG --yes --key myKeyTwo --value "Value 2"
+az appconfig kv list --name $AZURE_APP_CONFIG
+
+# CosmosDB
+# Create the account
+az cosmosdb create \
+    -n $COSMOS_ACCOUNT \
+    -g $AZURE_RESOURCE_GROUP \
+    --default-consistency-level Session \
+    --locations regionName=$REGION_NAME failoverPriority=0 isZoneRedundant=False
+
+# Create the database    
+az cosmosdb sql database create \
+    -a $COSMOS_ACCOUNT \
+    -g $AZURE_RESOURCE_GROUP \
+    -n $COSMOS_DB_NAME
+
+# Create the container    
+az cosmosdb sql container create \
+    -a $COSMOS_ACCOUNT \
+    -g $AZURE_RESOURCE_GROUP \
+    -d $COSMOS_DB_NAME \
+    -n $COSMOS_CONTAINER_NAME \
+    -p "/id"
+
+# Get the endpoint    
+export COSMOS_ENDPOINT=$(az cosmosdb show \
+    -n $COSMOS_ACCOUNT \
+    -g $AZURE_RESOURCE_GROUP \
+    --query documentEndpoint -o tsv)
+    
+# Assign the Cosmos DB Built-in Data Contributor role to the signed-in user as a Microsoft Entra identity.
+az ad signed-in-user show --query id -o tsv \
+    | az cosmosdb sql role assignment create \
+    --account-name $COSMOS_ACCOUNT \
+    --resource-group $AZURE_RESOURCE_GROUP \
+    --scope "/" \
+    --principal-id @- \
+    --role-definition-id 00000000-0000-0000-0000-000000000002
+    
+# Export the key of the Azure Cosmos DB account as an environment variable.
+export COSMOS_KEY=$(az cosmosdb keys list \
+    -n $COSMOS_ACCOUNT \
+    -g $AZURE_RESOURCE_GROUP \
+    --query primaryMasterKey -o tsv)
+
+# Event Hubs
+az eventhubs namespace create \
+    --name $EVENT_HUBS_NAMESPACE \
+    --resource-group $AZURE_RESOURCE_GROUP
+
+az eventhubs eventhub create \
+    --name $EVENTHUBS_NAME \
+    --namespace-name $EVENTHUBS_NAMESPACE \
+    --resource-group $AZURE_RESOURCE_GROUP \
+    --partition-count 2
+    
+export EVENTHUBS_EVENTHUB_RESOURCE_ID=$(az eventhubs eventhub show \
+--resource-group $AZURE_RESOURCE_GROUP \
+--namespace-name EVENTHUBS_NAMESPACE \
+--name $EVENTHUBS_NAME \
+--query 'id' \
+--output tsv)
+
+az role assignment create \
+    --role "Azure Event Hubs Data Owner" \
+    --assignee $(az ad signed-in-user show --query 'id' --output tsv) \
+    --scope $EVENTHUBS_EVENTHUB_RESOURCE_ID
+
+export QUARKUS_AZURE_EVENTHUBS_NAMESPACE=$EVENTHUBS_NAMESPACE
+export QUARKUS_AZURE_EVENTHUBS_EVENTHUB_NAME=$EVENTHUBS_EVENTHUB_NAME
+```
 ## App Configuration
 Set up the Azure infrastructure following these instructions:https://docs.quarkiverse.io/quarkus-azure-services/dev/quarkus-azure-app-configuration.html
 
