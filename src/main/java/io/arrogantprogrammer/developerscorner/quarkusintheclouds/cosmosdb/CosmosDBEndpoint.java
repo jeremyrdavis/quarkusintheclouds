@@ -21,21 +21,21 @@ public class CosmosDBEndpoint {
     @Inject
     CosmosClient cosmosClient;
 
-    String database = "demodb";
-    String container = "democontainer";
+    String database = "quarkusdb";
+    String container = "quarkuscontainer";
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     public Response createAffirmation(Item item, @Context UriInfo uriInfo) {
         Log.debug("Received item: " + item.toString());
-        getContainer(database, container, true).upsertItem(item);
+        getContainer(database, container, false).upsertItem(item);
         return Response.created(uriInfo.getAbsolutePathBuilder().path(item.getId()).build()).build();
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getItem() {
-        CosmosItemResponse<Item> item = getContainer(database, container, false).readItem("2", new PartitionKey("2"),
+        CosmosItemResponse<Item> item = getContainer(database, container, false).readItem("1", new PartitionKey("1"),
                 Item.class);
         return Response.ok().entity(item.getItem()).build();
     }

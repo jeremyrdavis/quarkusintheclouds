@@ -11,9 +11,9 @@ export AZURE_RESOURCE_GROUP=rg-quarkus-in-azure-demo \
 export LOCATION=eastus \
 export REGION_NAME='East US' \
 export AZURE_APP_CONFIG=quarkus-azure-app-config \
-export COSMOS_ACCOUNT=quarkuscosmosaccount \
-export COSMOS_DB_NAME=quarkuscosmosdb \
-export COSMOS_CONTAINER_NAME=quarkuscosmoscontainer \
+export COSMOS_ACCOUNT=quarkusaccount \
+export COSMOS_DB_NAME=quarkusdb \
+export COSMOS_CONTAINER_NAME=quarkuscontainer \
 export EVENTHUBS_NAMESPACE=quarkuseventhubnamespace \
 export EVENTHUBS_NAME=quarkuseventhub \
 export KEYVAULT_NAME=quarkusazurekeyvault \
@@ -95,7 +95,7 @@ az cosmosdb sql container create \
     -p "/id"
 
 # Get the endpoint    
-export COSMOS_ENDPOINT=$(az cosmosdb show \
+export QUARKUS_AZURE_COSMOS_ENDPOINT=$(az cosmosdb show \
     -n $COSMOS_ACCOUNT \
     -g $AZURE_RESOURCE_GROUP \
     --query documentEndpoint -o tsv)
@@ -110,7 +110,7 @@ az ad signed-in-user show --query id -o tsv \
     --role-definition-id 00000000-0000-0000-0000-000000000002
     
 # Export the key of the Azure Cosmos DB account as an environment variable.
-export COSMOS_KEY=$(az cosmosdb keys list \
+export QUARKUS_AZURE_COSMOS_KEY=$(az cosmosdb keys list \
     -n $COSMOS_ACCOUNT \
     -g $AZURE_RESOURCE_GROUP \
     --query primaryMasterKey -o tsv)
