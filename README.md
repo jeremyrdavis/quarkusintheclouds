@@ -7,17 +7,28 @@ If you want to learn more about Quarkus, please visit its website: <https://quar
 ## Azure Set Up
 
 ```bash
-export AZURE_RESOURCE_GROUP=rg-quarkus-in-azure-demo
-export LOCATION=eastus
-export REGION_NAME='East US'
-export AZURE_APP_CONFIG=quarkus-azure-app-config
-export COSMOS_ACCOUNT=quarkuscosmosaccount
-export COSMOS_DB_NAME=quarkuscosmosdb
-export COSMOS_CONTAINER_NAME=quarkuscosmoscontainer
-export EVENTHUBS_NAMESPACE=quarkuseventhubnamespace
-export EVENTHUBS_NAME=quarkuseventhub
+export AZURE_RESOURCE_GROUP=rg-quarkus-in-azure-demo \
+export LOCATION=eastus \
+export REGION_NAME='East US' \
+export AZURE_APP_CONFIG=quarkus-azure-app-config \
+export COSMOS_ACCOUNT=quarkuscosmosaccount \
+export COSMOS_DB_NAME=quarkuscosmosdb \
+export COSMOS_CONTAINER_NAME=quarkuscosmoscontainer \
+export EVENTHUBS_NAMESPACE=quarkuseventhubnamespace \
+export EVENTHUBS_NAME=quarkuseventhub \
+export KEYVAULT_NAME=quarkusazurekeyvault \
+export KEYVUALT_SECRET_NAME=secret1 \
+export KEYVAULT_SECRET_VALUE=mysecret
 
-echo $AZURE_RESOURCE_GROUP $LOCATION $REGION_NAME $COSMOS_DB_NAME $COSMOS_CONTAINER_NAME $EVENTHUBS_NAMESPACE $EVENTHUBS_NAME
+echo $AZURE_RESOURCE_GROUP \
+echo $LOCATION $REGION_NAME \
+echo $COSMOS_DB_NAME \
+echo $COSMOS_CONTAINER_NAME \
+echo $EVENTHUBS_NAMESPACE \
+echo $EVENTHUBS_NAME \
+echo $KEYVAULT_NAME \
+echo $KEYVUALT_SECRET_NAME \
+echo $KEYVAULT_SECRET_VALUE
 
 
 
@@ -103,6 +114,22 @@ az role assignment create \
 
 export QUARKUS_AZURE_EVENTHUBS_NAMESPACE=$EVENTHUBS_NAMESPACE
 export QUARKUS_AZURE_EVENTHUBS_EVENTHUB_NAME=$EVENTHUBS_EVENTHUB_NAME
+
+# Key Vault
+az keyvault create --name $KEYVAULT_NAME \
+    --resource-group $AZURE_RESOURCE_GROUP \
+    --location $LOCATION \
+    --enable-rbac-authorization false
+
+az keyvault secret set \
+    --vault-name $KEYVAULT_NAME \
+    --name $KEYVUALT_SECRET_NAME \
+    --value $KEYVAULT_SECRET_VALUE
+    
+export QUARKUS_AZURE_KEYVAULT_SECRET_ENDPOINT=$(az keyvault show --name $KEYVAULT_NAME \
+    --resource-group $AZURE_RESOURCE_GROUP \
+    --query properties.vaultUri \
+    --output tsv)
 ```
 ## App Configuration
 Set up the Azure infrastructure following these instructions:https://docs.quarkiverse.io/quarkus-azure-services/dev/quarkus-azure-app-configuration.html
