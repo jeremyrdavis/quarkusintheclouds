@@ -6,6 +6,8 @@ If you want to learn more about Quarkus, please visit its website: <https://quar
 
 ## Azure Set Up
 
+### Azure CLI
+
 ```bash
 export AZURE_RESOURCE_GROUP=rg-quarkus-in-azure-demo \
 export LOCATION=eastus \

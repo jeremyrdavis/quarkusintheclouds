@@ -1,7 +1,0 @@
-azure_resource_group = "rg-quarkus-in-azure-demo"
-azure_app_config     = "quarkus-azure-app-config"
-location             = "eastus"
-region_name          = "East US"
-cosmos_account       = "quarkuscosmosaccount"
-cosmos_db_name       = "quarkuscosmosdb"
-cosmos_container_name = "quarkuscosmoscontainer"
