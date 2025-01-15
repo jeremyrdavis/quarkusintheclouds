@@ -1,43 +1,3 @@
-variable "subscription_id" {
-    description = "Azure subscription ID"
-    type        = string
-    default     = "SUBSCRIPTION_ID"
-}
-variable "tenant_id" {
-    description = "Azure tenant ID"
-    type        = string
-    default     = "TENANT_ID"
-}
-variable "resource_group_name" {
-  description = "Azure resource group name"
-  type        = string
-  default     = "rg-qaz"
-}
-
-variable "location" {
-  description = "Azure location for resources"
-  type        = string
-  default     = "eastus"
-}
-
-variable "keyvault_name" {
-  description = "Name of the Key Vault"
-  type        = string
-  default     = "qazkeyvault"
-}
-
-variable "keyvault_secret_name" {
-  description = "Name of the Key Vault secret"
-  type        = string
-  default     = "qaz-secret"
-}
-
-variable "keyvault_secret_value" {
-  description = "Value of the Key Vault secret"
-  type        = string
-  default     = "myothersecret"
-}
-
 terraform {
   required_providers {
     azurerm = {
@@ -76,20 +36,31 @@ resource "azurerm_key_vault" "example" {
   tenant_id = data.azurerm_client_config.current.tenant_id
 
   access_policy {
-
     tenant_id = data.azurerm_client_config.current.tenant_id
     object_id = data.azurerm_client_config.current.object_id
 
     key_permissions = [
       "Get",
+      "List",
+      "Create"
     ]
 
     secret_permissions = [
       "Get",
+      "List",
+      "Set"
     ]
 
     storage_permissions = [
       "Get",
+      "List",
+      "Set"
     ]
   }
+}
+
+resource "azurerm_key_vault_secret" "secret1" {
+  name         = var.keyvault_secret_name
+  value        = var.keyvault_secret_value
+  key_vault_id = azurerm_key_vault.example.id
 }
