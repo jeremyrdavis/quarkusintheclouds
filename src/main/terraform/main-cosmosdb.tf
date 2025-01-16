@@ -1,22 +1,6 @@
-# Global
-provider "azurerm" {
-  features {
-    key_vault {
-      purge_soft_delete_on_destroy    = true
-      recover_soft_deleted_key_vaults = true
-    }
-  }
-  subscription_id = var.subscription_id
-}
-
-resource "azurerm_resource_group" "main" {
-  name     = var.resource_group_name
-  location = var.location
-}
-
 # CosmosDB
 resource "azurerm_cosmosdb_account" "main" {
-  name                = var.cosmos_account_name
+  name                = "${var.cosmos_account_name}-${random_integer.num.result}"
   resource_group_name = azurerm_resource_group.main.name
   location            = azurerm_resource_group.main.location
   offer_type          = "Standard"
@@ -31,13 +15,13 @@ resource "azurerm_cosmosdb_account" "main" {
 }
 
 resource "azurerm_cosmosdb_sql_database" "main" {
-  name                = var.cosmos_db_name
+  name                = "${var.cosmos_db_name}-${random_integer.num.result}"
   resource_group_name = azurerm_resource_group.main.name
   account_name        = azurerm_cosmosdb_account.main.name
 }
 
 resource "azurerm_cosmosdb_sql_container" "main" {
-  name                = var.cosmos_container_name
+  name                = "${var.cosmos_container_name}-${random_integer.num.result}"
   resource_group_name = azurerm_resource_group.main.name
   account_name        = azurerm_cosmosdb_account.main.name
   database_name       = azurerm_cosmosdb_sql_database.main.name
