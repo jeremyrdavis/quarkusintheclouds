@@ -58,3 +58,8 @@ module "cosmosdb" {
   source = "./modules/cosmosdb"
     cosmos_account_name = "qaz-cosmos${random_integer.num.result}"
 }
+
+module "eventhubs" {
+  source = "./modules/eventhubs"
+  eventhubs_namespace_name = "qaz-eventhubs-${random_integer.num.result}"
+}
