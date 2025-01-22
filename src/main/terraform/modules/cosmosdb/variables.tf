@@ -17,4 +17,16 @@ variable "cosmos_container_name" {
   default     = "qazcontainer"
 }
 
+variable "resource_group_name" {
+    description = "Name of the Resource Group"
+    type        = string
+    default = "qz-rg"
+}
+
+variable "location" {
+    description = "Location of the Resource Group"
+    type        = string
+    default     = "eastus"
+}
+
 

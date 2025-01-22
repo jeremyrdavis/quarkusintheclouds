@@ -53,3 +53,8 @@ module "blobstorage"{
     storage_account_name = "qazstorage${random_integer.num.result}"
     location = var.location
 }
+
+module "cosmosdb" {
+  source = "./modules/cosmosdb"
+    cosmos_account_name = "qaz-cosmos${random_integer.num.result}"
+}
