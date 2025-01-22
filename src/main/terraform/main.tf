@@ -46,3 +46,10 @@ module "appconfig" {
   resource_group_id = azurerm_resource_group.main.id
   resource_group_name = azurerm_resource_group.main.name
 }
+
+module "blobstorage"{
+    source = "./modules/blobstorage"
+    resource_group_name = azurerm_resource_group.main.name
+    storage_account_name = "qazstorage${random_integer.num.result}"
+    location = var.location
+}
