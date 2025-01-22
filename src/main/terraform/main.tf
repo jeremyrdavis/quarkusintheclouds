@@ -56,10 +56,24 @@ module "blobstorage"{
 
 module "cosmosdb" {
   source = "./modules/cosmosdb"
-    cosmos_account_name = "qaz-cosmos${random_integer.num.result}"
+  cosmos_account_name = "qaz-cosmos${random_integer.num.result}"
+  cosmos_db_name = "qaz-cosmosdb${random_integer.num.result}"
+  cosmos_container_name = "qaz-cosmoscontainer${random_integer.num.result}"
+  resource_group_name = azurerm_resource_group.main.name
 }
 
 module "eventhubs" {
   source = "./modules/eventhubs"
   eventhubs_namespace_name = "qaz-eventhubs-${random_integer.num.result}"
+    resource_group_name = azurerm_resource_group.main.name
+}
+
+module "keyvault" {
+  source = "./modules/keyvault"
+    keyvault_name = "qaz-kv-${random_integer.num.result}"
+    keyvault_secret_name = "qaz-kv-secret-${random_integer.num.result}"
+    keyvault_secret_value = "mynewsecret-${random_integer.num.result}"
+    resource_group_name = azurerm_resource_group.main.name
+    tenant_id = data.azurerm_client_config.current.tenant_id
+    object_id = data.azurerm_client_config.current.object_id
 }
