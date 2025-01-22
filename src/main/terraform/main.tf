@@ -36,3 +36,13 @@ resource "azurerm_resource_group" "main" {
   name     = "rg-${random_integer.num.result}"
   location = var.location
 }
+
+data "azurerm_client_config" "current" {}
+
+module "appconfig" {
+  source            = "./modules/appconfig"
+  role_id           = data.azurerm_client_config.current.object_id
+  app_config_name   = "qaz-appconfig-${random_integer.num.result}"
+  resource_group_id = azurerm_resource_group.main.id
+  resource_group_name = azurerm_resource_group.main.name
+}
