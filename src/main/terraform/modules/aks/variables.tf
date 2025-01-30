@@ -4,16 +4,28 @@ variable "subscription_id" {
   description = "Subscription id"
 }
 
-variable "resource_group_location" {
+variable "location" {
   type        = string
   default     = "eastus"
   description = "Location of the resource group."
 }
 
-variable "resource_group_name_prefix" {
+variable "resource_group_name" {
   type        = string
   default     = "rg"
   description = "Prefix of the resource group name that's combined with a random ID so name is unique in your Azure subscription."
+}
+
+variable "resource_group_id" {
+    type        = string
+    default     = "NONE"
+    description = "Resource group id"
+}
+
+variable "random_num" {
+  type = string
+  default = "1000"
+  description = "Random number to generate unique resource group name."
 }
 
 variable "node_count" {
