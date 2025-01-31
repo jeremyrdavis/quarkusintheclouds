@@ -18,6 +18,10 @@ resource "azurerm_container_app" "frontend" {
       image  = "jeremydavis/quarkus-affirmations-frontend:1.1"
       cpu    = "0.5"
       memory = "1.0Gi"
+      env {
+        name  = "API_BASE_URL"
+        value = "https://${azurerm_container_app.backend.latest_revision_fqdn}"
+      }
     }
   }
 
