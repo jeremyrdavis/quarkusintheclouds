@@ -95,3 +95,10 @@ module "keyvault" {
     object_id = data.azurerm_client_config.current.object_id
 }
 
+module "containerapps" {
+  source = "./modules/containerapps"
+  environment_name = "qaz-containerapps-${random_integer.num.result}"
+  location = var.location
+  resource_group_name = azurerm_resource_group.main.name
+}
+

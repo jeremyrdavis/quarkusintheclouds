@@ -37,3 +37,11 @@ output "aks-kube_config" {
   value     = module.aks.kube_config
   sensitive = true
 }
+
+output "aca-frontend-url" {
+  value = module.containerapps.frontend_url
+}
+
+output "aca-backend-url" {
+  value = module.containerapps.backend_url
+}
