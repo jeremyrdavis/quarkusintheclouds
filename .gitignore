@@ -50,3 +50,6 @@ nb-configuration.xml
 terraform.tfstate
 terraform.tfstate.backup
 *.plan
+
+# Quarkus
+*-runner
