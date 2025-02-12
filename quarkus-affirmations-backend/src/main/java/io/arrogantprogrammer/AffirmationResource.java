@@ -21,4 +21,6 @@ public class AffirmationResource {
         Log.debug("Returning affirmation: " + affirmation.text());
         return affirmation;
     }
+
+
 }

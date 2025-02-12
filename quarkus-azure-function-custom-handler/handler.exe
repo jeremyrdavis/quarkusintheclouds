@@ -1,0 +1,8 @@
+{
+  "version": "2.0",
+  "customHandler": {
+    "description": {
+      "defaultExecutablePath": "quarkus-azure-function-1.0.0-SNAPSHOT-runner"
+    }
+  }
+}
