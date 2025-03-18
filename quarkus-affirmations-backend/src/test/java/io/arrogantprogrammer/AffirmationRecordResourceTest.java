@@ -10,7 +10,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.isIn;
 
 @QuarkusTest
-public class AffirmationResourceTest {
+public class AffirmationRecordResourceTest {
 
     List<String> expectedAffirmations = List.of(
             "You are amazing!",

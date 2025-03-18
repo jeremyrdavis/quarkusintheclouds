@@ -1,21 +1,37 @@
 package io.arrogantprogrammer;
 
-import java.util.ArrayList;
-import java.util.List;
+public class Affirmation {
 
-public record Affirmation(String text, String author) {
+    static final String PARTITION_KEY = "/id";
 
-    static List<Affirmation> allAffirmations() {
-        return new ArrayList<>(){{
-            add(new Affirmation("You are amazing!", "ArrogantProgrammer"));
-            add(new Affirmation("Believe in yourself!", "ConfidentCoder"));
-            add(new Affirmation("You can achieve anything!", "DiabolicalDeveloper"));
-            add(new Affirmation("Stay positive and strong!", "HopefulHacker"));
-            add(new Affirmation("Your potential is limitless!", "AngelicArchitect"));
-        }};
+    String id = java.util.UUID.randomUUID().toString();
+
+    String text;
+
+    String author;
+
+    Affirmation(String text, String author) {
+        this.text = text;
+        this.author = author;
     }
 
-    static Affirmation randomAffirmation() {
-        return allAffirmations().get((int) (Math.random() * allAffirmations().size()));
+    void setText(String text) {
+        this.text = text;
+    }
+
+    void setAuthor(String author) {
+        this.author = author;
+    }
+
+    String getId() {
+        return id;
+    }
+
+    String getText() {
+        return text;
+    }
+
+    String getAuthor() {
+        return author;
     }
 }
