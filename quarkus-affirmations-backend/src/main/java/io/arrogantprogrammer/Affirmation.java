@@ -1,16 +1,26 @@
 package io.arrogantprogrammer;
 
-public class Affirmation {
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import java.io.Serializable;
+
+public class Affirmation implements Serializable {
 
     static final String PARTITION_KEY = "/id";
 
+    @JsonProperty("id")
     String id = java.util.UUID.randomUUID().toString();
 
+    @JsonProperty("text")
     String text;
 
+    @JsonProperty("author")
     String author;
 
-    Affirmation(String text, String author) {
+    public Affirmation() {
+    }
+
+    public Affirmation(String text, String author) {
         this.text = text;
         this.author = author;
     }

@@ -3,9 +3,14 @@ package io.arrogantprogrammer;
 import com.azure.cosmos.CosmosClient;
 import com.azure.cosmos.CosmosContainer;
 import com.azure.cosmos.models.CosmosItemResponse;
+import com.azure.cosmos.models.PartitionKey;
 import io.quarkus.logging.Log;
 import jakarta.inject.Inject;
 import jakarta.enterprise.context.ApplicationScoped;
+
+import java.util.UUID;
+
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 
 @ApplicationScoped
 public class AffirmationRepository {
@@ -13,14 +18,18 @@ public class AffirmationRepository {
     @Inject
     CosmosClient cosmosClient;
 
-    private static final String DATABASE_NAME = "quarkusdb";
-    private static final String CONTAINER_NAME = "affirmations";
+    @ConfigProperty(name = "affirmations.database-name")
+    private String DATABASE_NAME;
 
-    protected AffirmationRecord createAffirmation(CreateAffirmationCommand createAffirmationCommand) {
+    @ConfigProperty(name = "affirmations.container-name")
+    private String CONTAINER_NAME;
+
+    protected void createAffirmation(CreateAffirmationCommand createAffirmationCommand) {
+        Log.debug("Creating affirmation: " + createAffirmationCommand);
         Affirmation affirmation = new Affirmation(createAffirmationCommand.text(), createAffirmationCommand.author());
-        CosmosItemResponse<Affirmation> cosmosItemResponse = getContainer().upsertItem(affirmation);
-        Log.debugf("Created affirmation with id: %s", cosmosItemResponse.getItem().id);
-        return new AffirmationRecord(cosmosItemResponse.getItem().id, cosmosItemResponse.getItem().text, cosmosItemResponse.getItem().getAuthor());
+        Log.debug("Affirmation: " + affirmation);
+        CosmosItemResponse<Affirmation> cosmosItemResponse = getContainer().createItem(affirmation);
+        Log.debugf("Created affirmation with id: %s", cosmosItemResponse.toString());
     }
 
     protected AffirmationRecord readAffirmation(String id) {

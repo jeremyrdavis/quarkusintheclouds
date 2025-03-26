@@ -2,5 +2,6 @@
   "azureFunctions.deploySubpath": "hello-function",
   "azureFunctions.projectLanguage": "Custom",
   "azureFunctions.projectRuntime": "~4",
-  "debug.internalConsoleOptions": "neverOpen"
+  "debug.internalConsoleOptions": "neverOpen",
+  "java.configuration.updateBuildConfiguration": "interactive"
 }

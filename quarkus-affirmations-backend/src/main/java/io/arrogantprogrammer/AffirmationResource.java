@@ -8,7 +8,7 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.UriInfo;
 
-@Path("/affirmation")
+@Path("/affirmations")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class AffirmationResource {
@@ -26,7 +26,7 @@ public class AffirmationResource {
     @POST
     public Response createAffirmation(CreateAffirmationCommand createAffirmationCommand, @Context UriInfo uriInfo) {
         Log.debug("Creating affirmation from: " + createAffirmationCommand.toString());
-        AffirmationRecord affirmationRecord = affirmationRepository.createAffirmation(createAffirmationCommand);
+        affirmationRepository.createAffirmation(createAffirmationCommand);
         return Response.created(uriInfo.getAbsolutePathBuilder().path(affirmationRecord.id()).build()).build();
     }
 

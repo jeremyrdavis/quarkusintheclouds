@@ -4,6 +4,15 @@ This project uses Quarkus, the Supersonic Subatomic Java Framework.
 
 If you want to learn more about Quarkus, please visit its website: <https://quarkus.io/>.
 
+## Local Developments
+
+Install the CosmosDB emulator: https://learn.microsoft.com/en-us/azure/cosmos-db/how-to-develop-emulator
+For Apple Silicon: https://learn.microsoft.com/en-us/azure/cosmos-db/emulator-linux
+
+You will need Docker or Podman Desktop to run the CosmosDB emulator.
+
+```bash
+
 ## Azure Set Up
 
 ### Terraform
@@ -57,8 +66,6 @@ echo $EVENTHUBS_NAME \
 echo $KEYVAULT_NAME \
 echo $KEYVUALT_SECRET_NAME \
 echo $KEYVAULT_SECRET_VALUE
-
-
 
 # App Config
 az group create \

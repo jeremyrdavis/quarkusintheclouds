@@ -1,3 +1,10 @@
+# Global
+variable "subscription_id" {
+  description = "Azure subscription ID"
+  type        = string
+  default     = "SUBSCRIPTION_ID"
+}
+
 # CosmosDB variables
 variable "cosmos_account_name" {
   description = "Name of the Cosmos DB account"
