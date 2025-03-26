@@ -8,6 +8,7 @@ import io.quarkus.logging.Log;
 import jakarta.inject.Inject;
 import jakarta.enterprise.context.ApplicationScoped;
 
+import java.util.Random;
 import java.util.UUID;
 
 import org.eclipse.microprofile.config.inject.ConfigProperty;
@@ -24,12 +25,13 @@ public class AffirmationRepository {
     @ConfigProperty(name = "affirmations.container-name")
     private String CONTAINER_NAME;
 
-    protected void createAffirmation(CreateAffirmationCommand createAffirmationCommand) {
+    protected AffirmationRecord createAffirmation(CreateAffirmationCommand createAffirmationCommand) {
         Log.debug("Creating affirmation: " + createAffirmationCommand);
         Affirmation affirmation = new Affirmation(createAffirmationCommand.text(), createAffirmationCommand.author());
         Log.debug("Affirmation: " + affirmation);
         CosmosItemResponse<Affirmation> cosmosItemResponse = getContainer().createItem(affirmation);
         Log.debugf("Created affirmation with id: %s", cosmosItemResponse.toString());
+        return new AffirmationRecord(affirmation.getId(), affirmation.getText(),affirmation.getAuthor());
     }
 
     protected AffirmationRecord readAffirmation(String id) {
@@ -50,5 +52,17 @@ public class AffirmationRepository {
 
     private CosmosContainer getContainer() {
         return cosmosClient.getDatabase(DATABASE_NAME).getContainer(CONTAINER_NAME);
+    }
+
+    protected AffirmationRecord randomAffirmation() {
+        CosmosContainer container = getContainer();
+        long count = container.readAllItems(new PartitionKey("partitionKey"), AffirmationRecord.class).stream().count();
+        int randomIndex = new Random().nextInt(Long.valueOf(count).intValue());
+        AffirmationRecord randomAffirmation = container.readAllItems(new PartitionKey("partitionKey"), AffirmationRecord.class)
+            .stream()
+            .skip(randomIndex)
+            .findFirst()
+            .orElseThrow(() -> new RuntimeException("No affirmation found"));
+        return randomAffirmation;
     }
 }

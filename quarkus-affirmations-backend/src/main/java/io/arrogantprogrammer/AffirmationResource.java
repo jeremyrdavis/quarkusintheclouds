@@ -17,6 +17,12 @@ public class AffirmationResource {
     AffirmationRepository affirmationRepository;
 
     @GET
+    @Path("/random")
+    public AffirmationRecord randomAffirmation() {
+        return affirmationRepository.randomAffirmation();
+    }
+
+    @GET
     public AffirmationRecord getAffirmation() {
         AffirmationRecord affirmationRecord = AffirmationRecord.randomAffirmation();
         Log.debug("Returning affirmation: " + affirmationRecord.text());
@@ -26,7 +32,7 @@ public class AffirmationResource {
     @POST
     public Response createAffirmation(CreateAffirmationCommand createAffirmationCommand, @Context UriInfo uriInfo) {
         Log.debug("Creating affirmation from: " + createAffirmationCommand.toString());
-        affirmationRepository.createAffirmation(createAffirmationCommand);
+        AffirmationRecord affirmationRecord = affirmationRepository.createAffirmation(createAffirmationCommand);
         return Response.created(uriInfo.getAbsolutePathBuilder().path(affirmationRecord.id()).build()).build();
     }
 
@@ -50,6 +56,5 @@ public class AffirmationResource {
         affirmationRepository.deleteAffirmation(id);
         return Response.noContent().build();
     }
-
 
 }
