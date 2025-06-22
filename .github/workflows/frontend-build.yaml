@@ -1,0 +1,14 @@
+name: Build and Publish Frontend
+
+on:
+  push:
+    paths:
+      - 'quarkus-affirmations-frontend/**'
+
+jobs:
+  call-build-and-publish:
+    uses: ./.github/workflows/build-and-publish.yaml
+    with:
+      project-directory: quarkus-affirmations-frontend
+      dockerfile-path: quarkus-affirmations-frontend/src/main/docker/Dockerfile.jvm
+      dockerhub-username: ${{ secrets.DOCKERHUB_USERNAME }}
