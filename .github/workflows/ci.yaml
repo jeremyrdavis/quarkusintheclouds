@@ -6,16 +6,13 @@ on:
       - main
 
 jobs:
+
   build-and-publish-backend:
     uses: ./.github/workflows/build-and-publish.yaml
     with:
       project-directory: quarkus-affirmations-backend
-      dockerfile-path: quarkus-affirmations-backend/src/main/docker/Dockerfile.jvm
-      dockerhub-username: ${{ secrets.DOCKERHUB_USERNAME }}
 
   build-and-publish-frontend:
     uses: ./.github/workflows/build-and-publish.yaml
     with:
       project-directory: quarkus-affirmations-frontend
-      dockerfile-path: quarkus-affirmations-frontend/src/main/docker/Dockerfile.jvm
-      dockerhub-username: ${{ secrets.DOCKERHUB_USERNAME }}
