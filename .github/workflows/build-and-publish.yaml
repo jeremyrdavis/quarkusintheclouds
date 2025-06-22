@@ -6,15 +6,6 @@ on:
       project-directory:
         required: true
         type: string
-      dockerfile-path:
-        required: true
-        type: string
-      dockerhub-username:
-        required: true
-        type: string
-    secrets:
-      DOCKERHUB_USERNAME:
-        required: true
 
 jobs:
   build-and-publish:
