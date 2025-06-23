@@ -45,3 +45,31 @@ output "aca-frontend-url" {
 output "aca-backend-url" {
   value = module.containerapps.backend_url
 }
+
+# ARO outputs
+output "aro-cluster_name" {
+  description = "Name of the ARO cluster"
+  value       = module.aro.cluster_name
+}
+
+output "aro-console_url" {
+  description = "URL of the OpenShift console"
+  value       = module.aro.console_url
+}
+
+output "aro-api_server_url" {
+  description = "URL of the OpenShift API server"
+  value       = module.aro.api_server_url
+}
+
+output "aro-cluster_credentials" {
+  description = "Cluster credentials for OpenShift (username, password, host)"
+  value       = module.aro.cluster_credentials
+  sensitive   = true
+}
+
+output "aro-kubeconfig" {
+  description = "Kubeconfig for the ARO cluster"
+  value       = module.aro.kubeconfig
+  sensitive   = true
+}

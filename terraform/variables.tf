@@ -17,3 +17,47 @@ variable "location" {
   default     = "eastus"
 }
 
+# ARO Variables
+variable "aro_client_id" {
+  description = "Service principal client ID for ARO cluster"
+  type        = string
+  default     = "ARO_CLIENT_ID"
+}
+
+variable "aro_client_secret" {
+  description = "Service principal client secret for ARO cluster"
+  type        = string
+  default     = "ARO_CLIENT_SECRET"
+  sensitive   = true
+}
+
+variable "aro_domain" {
+  description = "Domain for the ARO cluster"
+  type        = string
+  default     = "quarkusintheclouds"
+}
+
+variable "aro_worker_node_count" {
+  description = "Number of worker nodes for ARO cluster"
+  type        = number
+  default     = 3
+}
+
+variable "aro_master_vm_size" {
+  description = "VM size for ARO master nodes"
+  type        = string
+  default     = "Standard_D8s_v3"
+}
+
+variable "aro_worker_vm_size" {
+  description = "VM size for ARO worker nodes"
+  type        = string
+  default     = "Standard_D4s_v3"
+}
+
+variable "tags" {
+  description = "Tags to apply to resources"
+  type        = map(string)
+  default     = {}
+}
+

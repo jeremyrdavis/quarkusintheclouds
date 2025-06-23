@@ -102,3 +102,18 @@ module "containerapps" {
   resource_group_name = azurerm_resource_group.main.name
 }
 
+module "aro" {
+  source = "./modules/aro"
+  location = var.location
+  resource_group_name = azurerm_resource_group.main.name
+  resource_group_id = azurerm_resource_group.main.id
+  random_num = random_integer.num.result
+  client_id = var.aro_client_id
+  client_secret = var.aro_client_secret
+  domain = var.aro_domain
+  worker_node_count = var.aro_worker_node_count
+  master_vm_size = var.aro_master_vm_size
+  worker_vm_size = var.aro_worker_vm_size
+  tags = var.tags
+}
+
