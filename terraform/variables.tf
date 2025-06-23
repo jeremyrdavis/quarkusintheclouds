@@ -18,19 +18,6 @@ variable "location" {
 }
 
 # ARO Variables
-variable "aro_client_id" {
-  description = "Service principal client ID for ARO cluster"
-  type        = string
-  default     = "ARO_CLIENT_ID"
-}
-
-variable "aro_client_secret" {
-  description = "Service principal client secret for ARO cluster"
-  type        = string
-  default     = "ARO_CLIENT_SECRET"
-  sensitive   = true
-}
-
 variable "aro_domain" {
   description = "Domain for the ARO cluster"
   type        = string

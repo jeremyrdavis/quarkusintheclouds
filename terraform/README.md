@@ -11,16 +11,7 @@ export TF_VAR_subscription_id=$(az account show --query id -o tsv)
 export TF_VAR_tenant_id=$(az account show --query tenantId -o tsv)
 ```
 
-For ARO (Azure Red Hat OpenShift) deployment, you'll also need to create a service principal and export the credentials:
-
-```bash
-# Create service principal for ARO
-az ad sp create-for-rbac --name "aro-service-principal" --role contributor --scopes /subscriptions/$(az account show --query id -o tsv)
-
-# Export the service principal credentials
-export TF_VAR_aro_client_id="<service-principal-client-id>"
-export TF_VAR_aro_client_secret="<service-principal-client-secret>"
-```
+**Note**: The ARO module automatically creates its own service principal, so no manual service principal creation is required.
 
 From the src/main/terraform directory, run the following commands to create the resources in Azure:
 
@@ -41,7 +32,7 @@ terraform destroy
 This Terraform configuration includes the following modules:
 
 - **AKS**: Azure Kubernetes Service cluster
-- **ARO**: Azure Red Hat OpenShift cluster
+- **ARO**: Azure Red Hat OpenShift cluster (automatically creates service principal)
 - **AppConfig**: Azure App Configuration
 - **BlobStorage**: Azure Blob Storage
 - **CosmosDB**: Azure Cosmos DB
@@ -59,6 +50,9 @@ terraform output aro-cluster_info
 
 # Access the OpenShift console
 terraform output aro-console_url
+
+# View the service principal information (if needed)
+terraform output aro-service_principal_client_id
 ```
 
 The default username for ARO clusters is typically "kubeadmin". You can retrieve the password from the Azure portal or use the Azure CLI:

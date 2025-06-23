@@ -8,6 +8,10 @@ terraform {
       source  = "hashicorp/azurerm"
       version = "=4.15.0"
     }
+    azuread = {
+      source  = "hashicorp/azuread"
+      version = "~>2.0"
+    }
     random = {
       source  = "hashicorp/random"
       version = "3.6.2"
@@ -17,6 +21,33 @@ terraform {
       version = "0.9.1"
     }
   }
+}
+
+# Get ARO resource provider service principal
+data "azuread_service_principal" "aro_resource_provider" {
+  client_id = "f1dd0a37-89c6-4e07-bcd1-ffd3d43d8875"  # ARO resource provider application ID
+}
+
+# Create service principal for ARO
+resource "azuread_application" "aro_app" {
+  display_name = "aro-service-principal-${var.random_num}"
+}
+
+resource "azuread_service_principal" "aro_sp" {
+  client_id = azuread_application.aro_app.client_id
+}
+
+resource "azuread_service_principal_password" "aro_sp_password" {
+  service_principal_id = azuread_service_principal.aro_sp.id
+}
+
+# Assign contributor role to the service principal
+resource "azurerm_role_assignment" "aro_contributor" {
+  scope                = var.resource_group_id
+  role_definition_name = "Contributor"
+  principal_id         = azuread_service_principal.aro_sp.object_id
+
+  depends_on = [azuread_service_principal.aro_sp]
 }
 
 # Virtual Network for ARO
@@ -53,6 +84,15 @@ resource "azurerm_subnet" "worker_subnet" {
   depends_on = [azurerm_virtual_network.aro_vnet]
 }
 
+# Assign Network Contributor role to ARO resource provider service principal
+resource "azurerm_role_assignment" "aro_network_contributor" {
+  scope                = azurerm_virtual_network.aro_vnet.id
+  role_definition_name = "Network Contributor"
+  principal_id         = data.azuread_service_principal.aro_resource_provider.object_id
+
+  depends_on = [azurerm_virtual_network.aro_vnet]
+}
+
 # Azure Red Hat OpenShift Cluster
 resource "azurerm_redhat_openshift_cluster" "aro" {
   name                = "aro-cluster-${var.random_num}"
@@ -60,15 +100,14 @@ resource "azurerm_redhat_openshift_cluster" "aro" {
   location            = var.location
 
   cluster_profile {
-    domain          = var.domain
-    resource_group_id = var.resource_group_id
-    fips_enabled    = false
-    version         = "4.14.0"
+    domain       = var.domain
+    fips_enabled = false
+    version      = "4.17.27"
   }
 
   service_principal {
-    client_id     = var.client_id
-    client_secret = var.client_secret
+    client_id     = azuread_application.aro_app.client_id
+    client_secret = azuread_service_principal_password.aro_sp_password.value
   }
 
   network_profile {
@@ -100,6 +139,8 @@ resource "azurerm_redhat_openshift_cluster" "aro" {
 
   depends_on = [
     azurerm_subnet.master_subnet,
-    azurerm_subnet.worker_subnet
+    azurerm_subnet.worker_subnet,
+    azurerm_role_assignment.aro_contributor,
+    azurerm_role_assignment.aro_network_contributor
   ]
 } 

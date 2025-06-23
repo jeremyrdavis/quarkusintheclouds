@@ -29,7 +29,9 @@ public class AffirmationRepository {
         Log.debug("Creating affirmation: " + createAffirmationCommand);
         Affirmation affirmation = new Affirmation(createAffirmationCommand.text(), createAffirmationCommand.author());
         Log.debug("Affirmation: " + affirmation);
-        CosmosItemResponse<Affirmation> cosmosItemResponse = getContainer().createItem(affirmation);
+        CosmosContainer container = getContainer();
+
+        CosmosItemResponse<Affirmation> cosmosItemResponse = container.createItem(affirmation); //getContainer().createItem(affirmation);
         Log.debugf("Created affirmation with id: %s", cosmosItemResponse.toString());
         return new AffirmationRecord(affirmation.getId(), affirmation.getText(),affirmation.getAuthor());
     }

@@ -13,6 +13,16 @@ output "console_url" {
   value       = azurerm_redhat_openshift_cluster.aro.console_url
 }
 
+output "service_principal_client_id" {
+  description = "Client ID of the service principal created for ARO"
+  value       = azuread_application.aro_app.client_id
+}
+
+output "service_principal_object_id" {
+  description = "Object ID of the service principal created for ARO"
+  value       = azuread_service_principal.aro_sp.object_id
+}
+
 output "virtual_network_id" {
   description = "ID of the virtual network"
   value       = azurerm_virtual_network.aro_vnet.id

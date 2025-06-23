@@ -25,17 +25,6 @@ variable "domain" {
   default     = "quarkusintheclouds"
 }
 
-variable "client_id" {
-  type        = string
-  description = "Service principal client ID for ARO cluster."
-}
-
-variable "client_secret" {
-  type        = string
-  description = "Service principal client secret for ARO cluster."
-  sensitive   = true
-}
-
 variable "master_vm_size" {
   type        = string
   description = "VM size for master nodes."
