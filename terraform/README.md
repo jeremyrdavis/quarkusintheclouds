@@ -51,12 +51,19 @@ This Terraform configuration includes the following modules:
 
 ## ARO Cluster Access
 
-After deployment, you can access the OpenShift cluster using the credentials from the Terraform outputs:
+After deployment, you can access the OpenShift cluster using the console URL from the Terraform outputs:
 
 ```bash
-# Get the cluster credentials
-terraform output aro-cluster_credentials
+# Get the cluster information
+terraform output aro-cluster_info
 
 # Access the OpenShift console
 terraform output aro-console_url
+```
+
+The default username for ARO clusters is typically "kubeadmin". You can retrieve the password from the Azure portal or use the Azure CLI:
+
+```bash
+# Get the cluster credentials from Azure CLI
+az aro list-credentials --name <cluster-name> --resource-group <resource-group-name>
 ```

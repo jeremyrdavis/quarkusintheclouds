@@ -47,60 +47,60 @@ resource "azurerm_resource_group" "main" {
 
 data "azurerm_client_config" "current" {}
 
-module "aks" {
-  source = "./modules/aks"
-  subscription_id = data.azurerm_client_config.current.subscription_id
-  location = var.location
-  random_num = azurerm_resource_group.main.location
-  resource_group_name = azurerm_resource_group.main.name
-  resource_group_id = azurerm_resource_group.main.id
-}
+# module "aks" {
+#   source = "./modules/aks"
+#   subscription_id = data.azurerm_client_config.current.subscription_id
+#   location = var.location
+#   random_num = azurerm_resource_group.main.location
+#   resource_group_name = azurerm_resource_group.main.name
+#   resource_group_id = azurerm_resource_group.main.id
+# }
 
-module "appconfig" {
- source            = "./modules/appconfig"
- role_id           = data.azurerm_client_config.current.object_id
- app_config_name   = "qaz-appconfig-${random_integer.num.result}"
- resource_group_id = azurerm_resource_group.main.id
- resource_group_name = azurerm_resource_group.main.name
-}
+# module "appconfig" {
+#  source            = "./modules/appconfig"
+#  role_id           = data.azurerm_client_config.current.object_id
+#  app_config_name   = "qaz-appconfig-${random_integer.num.result}"
+#  resource_group_id = azurerm_resource_group.main.id
+#  resource_group_name = azurerm_resource_group.main.name
+# }
 
-module "blobstorage"{
-    source = "./modules/blobstorage"
-    resource_group_name = azurerm_resource_group.main.name
-    storage_account_name = "qazstorage${random_integer.num.result}"
-    location = var.location
-}
+# module "blobstorage"{
+#     source = "./modules/blobstorage"
+#     resource_group_name = azurerm_resource_group.main.name
+#     storage_account_name = "qazstorage${random_integer.num.result}"
+#     location = var.location
+# }
 
-module "cosmosdb" {
-  source = "./modules/cosmosdb"
-  cosmos_account_name = "qaz-cosmos${random_integer.num.result}"
-  cosmos_db_name = "qaz-cosmosdb${random_integer.num.result}"
-  cosmos_container_name = "qaz-cosmoscontainer${random_integer.num.result}"
-  resource_group_name = azurerm_resource_group.main.name
-}
+# module "cosmosdb" {
+#   source = "./modules/cosmosdb"
+#   cosmos_account_name = "qaz-cosmos${random_integer.num.result}"
+#   cosmos_db_name = "qaz-cosmosdb${random_integer.num.result}"
+#   cosmos_container_name = "qaz-cosmoscontainer${random_integer.num.result}"
+#   resource_group_name = azurerm_resource_group.main.name
+# }
 
-module "eventhubs" {
-  source = "./modules/eventhubs"
-  eventhubs_namespace_name = "qaz-eventhubs-${random_integer.num.result}"
-   resource_group_name = azurerm_resource_group.main.name
-}
+# module "eventhubs" {
+#   source = "./modules/eventhubs"
+#   eventhubs_namespace_name = "qaz-eventhubs-${random_integer.num.result}"
+#    resource_group_name = azurerm_resource_group.main.name
+# }
 
-module "keyvault" {
-  source = "./modules/keyvault"
-    keyvault_name = "qaz-kv-${random_integer.num.result}"
-    keyvault_secret_name = "qaz-kv-secret-${random_integer.num.result}"
-    keyvault_secret_value = "mynewsecret-${random_integer.num.result}"
-    resource_group_name = azurerm_resource_group.main.name
-    tenant_id = data.azurerm_client_config.current.tenant_id
-    object_id = data.azurerm_client_config.current.object_id
-}
+# module "keyvault" {
+#   source = "./modules/keyvault"
+#     keyvault_name = "qaz-kv-${random_integer.num.result}"
+#     keyvault_secret_name = "qaz-kv-secret-${random_integer.num.result}"
+#     keyvault_secret_value = "mynewsecret-${random_integer.num.result}"
+#     resource_group_name = azurerm_resource_group.main.name
+#     tenant_id = data.azurerm_client_config.current.tenant_id
+#     object_id = data.azurerm_client_config.current.object_id
+# }
 
-module "containerapps" {
-  source = "./modules/containerapps"
-  environment_name = "qaz-containerapps-${random_integer.num.result}"
-  location = var.location
-  resource_group_name = azurerm_resource_group.main.name
-}
+# module "containerapps" {
+#   source = "./modules/containerapps"
+#   environment_name = "qaz-containerapps-${random_integer.num.result}"
+#   location = var.location
+#   resource_group_name = azurerm_resource_group.main.name
+# }
 
 module "aro" {
   source = "./modules/aro"
