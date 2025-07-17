@@ -15,6 +15,7 @@ This Terraform module creates an Azure Red Hat OpenShift (ARO) cluster with the 
 - Azure subscription with ARO provider enabled
 - Azure AD permissions to create service principals
 - Resource group must be created by the parent module
+- Red Hat pull secret for accessing Red Hat container images
 
 ## Usage
 
@@ -28,6 +29,7 @@ module "aro" {
   random_num          = random_integer.num.result
 
   domain = "mycluster"
+  pull_secret = var.red_hat_pull_secret
 
   worker_node_count = 3
   master_vm_size    = "Standard_D8s_v3"
@@ -49,6 +51,7 @@ module "aro" {
 | resource_group_id   | Resource group ID               | `string`      | n/a                    |   yes    |
 | random_num          | Random number for unique naming | `string`      | n/a                    |   yes    |
 | domain              | Domain for the ARO cluster      | `string`      | `"quarkusintheclouds"` |    no    |
+| pull_secret         | Red Hat pull secret             | `string`      | n/a                    |   yes    |
 | master_vm_size      | VM size for master nodes        | `string`      | `"Standard_D8s_v3"`    |    no    |
 | worker_vm_size      | VM size for worker nodes        | `string`      | `"Standard_D4s_v3"`    |    no    |
 | worker_node_count   | Number of worker nodes          | `number`      | `3`                    |    no    |
@@ -78,3 +81,10 @@ module "aro" {
 - Pod CIDR is set to 10.128.0.0/14 and service CIDR to 172.30.0.0/16
 - After deployment, you can access the cluster using the console URL
 - Default username for ARO is typically "kubeadmin"
+- Red Hat pull secret is required for accessing Red Hat container images
+
+## Logging in
+
+'''bash
+az aro list-credentials --name <<CLUSTER_NAME>> --resource-group <<RESOURCE_GROUP_NAME>> --query "kubeadminPassword" -o tsv
+'''

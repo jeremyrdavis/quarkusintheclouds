@@ -13,6 +13,13 @@ export TF_VAR_tenant_id=$(az account show --query tenantId -o tsv)
 
 **Note**: The ARO module automatically creates its own service principal, so no manual service principal creation is required.
 
+**Important**: You need a Red Hat pull secret for the ARO cluster. You can get this from the Red Hat OpenShift Cluster Manager:
+
+```bash
+# Set the Red Hat pull secret
+export TF_VAR_aro_pull_secret='{"auths":{"fake":{"auth":"fake"}}}'
+```
+
 From the src/main/terraform directory, run the following commands to create the resources in Azure:
 
 ```bash
@@ -61,3 +68,12 @@ The default username for ARO clusters is typically "kubeadmin". You can retrieve
 # Get the cluster credentials from Azure CLI
 az aro list-credentials --name <cluster-name> --resource-group <resource-group-name>
 ```
+
+## Red Hat Pull Secret
+
+The ARO cluster requires a Red Hat pull secret to access Red Hat container images. You can obtain this from:
+
+1. **Red Hat OpenShift Cluster Manager**: https://console.redhat.com/openshift/install/azure/installer-provisioned
+2. **Red Hat Customer Portal**: https://access.redhat.com/
+
+The pull secret should be provided as a JSON string containing authentication information for Red Hat registries.

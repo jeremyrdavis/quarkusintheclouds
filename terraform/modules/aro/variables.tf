@@ -25,6 +25,12 @@ variable "domain" {
   default     = "quarkusintheclouds"
 }
 
+variable "pull_secret" {
+  type        = string
+  description = "Red Hat pull secret for accessing Red Hat container images."
+  sensitive   = true
+}
+
 variable "master_vm_size" {
   type        = string
   description = "VM size for master nodes."

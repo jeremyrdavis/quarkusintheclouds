@@ -112,6 +112,7 @@ module "aro" {
   resource_group_id = azurerm_resource_group.main.id
   random_num = random_integer.num.result
   domain = var.aro_domain
+  pull_secret = var.aro_pull_secret
   worker_node_count = var.aro_worker_node_count
   master_vm_size = var.aro_master_vm_size
   worker_vm_size = var.aro_worker_vm_size

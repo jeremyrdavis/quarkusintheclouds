@@ -103,6 +103,7 @@ resource "azurerm_redhat_openshift_cluster" "aro" {
     domain       = var.domain
     fips_enabled = false
     version      = "4.17.27"
+    pull_secret  = var.pull_secret
   }
 
   service_principal {

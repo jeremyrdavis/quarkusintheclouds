@@ -53,3 +53,8 @@ terraform.tfstate.backup
 
 # Quarkus
 *-runner
+
+# Terraform
+*.tfstate
+*.tfstate.backup
+
