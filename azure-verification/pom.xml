@@ -12,14 +12,15 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <quarkus.platform.artifact-id>quarkus-bom</quarkus.platform.artifact-id>
         <quarkus.platform.group-id>io.quarkus.platform</quarkus.platform.group-id>
-        <quarkus.platform.version>3.17.6</quarkus.platform.version>
+        <quarkus.platform.version>3.24.3</quarkus.platform.version>
         <skipITs>true</skipITs>
         <surefire-plugin.version>3.5.0</surefire-plugin.version>
-        <azure.app-configuration.version>1.1.0</azure.app-configuration.version>
-        <azure.cosmos.version>1.1.0</azure.cosmos.version>
-        <azure.eventhubs.version>1.1.0</azure.eventhubs.version>
-        <azure.key-vault.version>1.1.0</azure.key-vault.version>
-        <azure.blob-storage.version>1.1.0</azure.blob-storage.version>
+        <azure.app-configuration.version>1.1.6</azure.app-configuration.version>
+        <azure.cosmos.version>1.1.6</azure.cosmos.version>
+        <azure.eventhubs.version>1.1.6</azure.eventhubs.version>
+        <azure.key-vault.version>1.1.6</azure.key-vault.version>
+        <azure.blob-storage.version>1.1.6</azure.blob-storage.version>
+        <azure.servicebus.version>1.1.6</azure.servicebus.version>
     </properties>
 
     <dependencyManagement>
@@ -36,6 +37,11 @@
 
     <dependencies>
         <!--- Azure dependencies -->
+        <dependency>
+            <groupId>io.quarkiverse.azureservices</groupId>
+            <artifactId>quarkus-azure-servicebus</artifactId>
+            <version>${azure.servicebus.version}</version>
+        </dependency>
         <dependency>
             <groupId>io.quarkiverse.azureservices</groupId>
             <artifactId>quarkus-azure-storage-blob</artifactId>
