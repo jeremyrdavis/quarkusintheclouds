@@ -105,17 +105,29 @@ data "azurerm_client_config" "current" {}
 #   resource_group_name = azurerm_resource_group.main.name
 # }
 
-module "aro" {
-  source = "./modules/aro"
-  location = var.location
+module "eventbus" {
+  source = "./modules/eventbus"
+  eventbus_namespace_name = "qaz-eventbus-${random_integer.num.result}"
+  eventbus_queue_name = "qaz-eventbus-queue-${random_integer.num.result}"
+  eventbus_topic_name = "qaz-eventbus-topic-${random_integer.num.result}"
+  eventbus_subscription_name = "qaz-eventbus-sub-${random_integer.num.result}"
   resource_group_name = azurerm_resource_group.main.name
-  resource_group_id = azurerm_resource_group.main.id
-  random_num = random_integer.num.result
-  domain = var.aro_domain
-  pull_secret = var.aro_pull_secret
-  worker_node_count = var.aro_worker_node_count
-  master_vm_size = var.aro_master_vm_size
-  worker_vm_size = var.aro_worker_vm_size
-  tags = var.tags
+  location = var.location
+  eventbus_sku = "Standard"
+  create_topic = true
 }
+
+# module "aro" {
+#   source = "./modules/aro"
+#   location = var.location
+#   resource_group_name = azurerm_resource_group.main.name
+#   resource_group_id = azurerm_resource_group.main.id
+#   random_num = random_integer.num.result
+#   domain = var.aro_domain
+#   pull_secret = var.aro_pull_secret
+#   worker_node_count = var.aro_worker_node_count
+#   master_vm_size = var.aro_master_vm_size
+#   worker_vm_size = var.aro_worker_vm_size
+#   tags = var.tags
+# }
 

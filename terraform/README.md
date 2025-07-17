@@ -43,6 +43,7 @@ This Terraform configuration includes the following modules:
 - **AppConfig**: Azure App Configuration
 - **BlobStorage**: Azure Blob Storage
 - **CosmosDB**: Azure Cosmos DB
+- **EventBus**: Azure Service Bus for event-driven messaging
 - **EventHubs**: Azure Event Hubs
 - **KeyVault**: Azure Key Vault
 - **ContainerApps**: Azure Container Apps
@@ -67,6 +68,43 @@ The default username for ARO clusters is typically "kubeadmin". You can retrieve
 ```bash
 # Get the cluster credentials from Azure CLI
 az aro list-credentials --name <cluster-name> --resource-group <resource-group-name>
+```
+
+## EventBus Module
+
+The EventBus module creates an Azure Service Bus namespace with queues and topics for event-driven messaging:
+
+```bash
+# Get the EventBus connection information
+terraform output eventbus-namespace_name
+terraform output eventbus-queue_name
+terraform output eventbus-topic_name
+
+# Get the connection string (sensitive)
+terraform output eventbus-connection_string
+```
+
+The EventBus is ideal for:
+
+- **Microservices communication**: Reliable message passing between services
+- **Event-driven architectures**: Trigger actions based on events
+- **Asynchronous processing**: Non-blocking message processing
+- **Load balancing**: Distribute work across multiple consumers
+
+### Using with Quarkus Applications
+
+Set the connection string as an environment variable:
+
+```bash
+export SERVICEBUS_CONNECTION_STRING="$(terraform output -raw eventbus-connection_string)"
+```
+
+Add to your `application.properties`:
+
+```properties
+quarkus.messaging.outgoing.events.connector=smallrye-servicebus
+quarkus.messaging.outgoing.events.connection-string=${SERVICEBUS_CONNECTION_STRING}
+quarkus.messaging.outgoing.events.entity-name=your-queue-name
 ```
 
 ## Red Hat Pull Secret
