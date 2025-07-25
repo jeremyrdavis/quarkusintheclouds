@@ -18,8 +18,18 @@ jobs:
       - name: Set up JDK 21
         uses: actions/setup-java@v4
         with:
-          distribution: 'temurin'
-          java-version: '21'
+          distribution: "temurin"
+          java-version: "21"
+
+      - name: Get version from pom.xml
+        id: get_version
+        run: echo "::set-output name=version::$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)"
+
+      - name: Expose version as an output
+        run: echo "POM_VERSION=${{ steps.get_version.outputs.version }}" >> $GITHUB_ENV
+
+      - name: Print version
+        run: echo $POM_VERSION
 
       - name: Build with Maven
         working-directory: ${{ inputs.project-directory }}
@@ -31,9 +41,9 @@ jobs:
       - name: Build Docker image
         run: |
           docker build --file src/main/docker/Dockerfile.jvm \
-            -t ${{ secrets.DOCKERHUB_USERNAME }}/${{ inputs.project-directory }}:latest .
+            -t ${{ secrets.DOCKERHUB_USERNAME }}/${{ inputs.project-directory }}:${POM_VERSION} .
 
       - name: Push Docker image
         run: |
           echo ${{ secrets.DOCKERHUB_TOKEN }} | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ inputs.project-directory }}:latest
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ inputs.project-directory }}:${POM_VERSION}
