@@ -56,5 +56,7 @@ jobs:
             -t ${{ secrets.DOCKERHUB_USERNAME }}/${{ steps.get_artifact_id.outputs.artifact_id }}:${{ steps.get_version.outputs.version }} \
             -t ${{ secrets.DOCKERHUB_USERNAME }}/${{ steps.get_artifact_id.outputs.artifact_id }}:latest \
             .
+
+            echo ${{ secrets.DOCKERHUB_TOKEN }} | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ steps.get_artifact_id.outputs.artifact_id }}:${{ steps.get_version.outputs.version }}
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ steps.get_artifact_id.outputs.artifact_id }}:latest
