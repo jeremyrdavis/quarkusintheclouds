@@ -25,11 +25,18 @@ jobs:
         id: get_version
         run: echo "::set-output name=version::$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)"
 
+      - name: Get artifact id from pom.xml
+        id: get_artifact_id
+        run: echo "::set-output name=artifact_id::$(mvn help:evaluate -Dexpression=project.artifactId -q -DforceStdout)"
+
       - name: Expose version as an output
         run: echo "POM_VERSION=${{ steps.get_version.outputs.version }}" >> $GITHUB_ENV
 
+      - name: Expose artifactId as an output
+        run: echo "POM_ARTIFACT=${{ steps.get_artifactId.outputs.artifactId }}" >> $GITHUB_ENV
+
       - name: Print version
-        run: echo $POM_VERSION
+        run: echo "$POM_ARTIFACT:$POM_VERSION"
 
       - name: Build with Maven
         working-directory: ${{ inputs.project-directory }}
@@ -42,9 +49,9 @@ jobs:
         run: |
           cd ${{ inputs.project-directory }}
           docker build --file src/main/docker/Dockerfile.jvm \
-            -t ${{ secrets.DOCKERHUB_USERNAME }}/${{ inputs.project-directory }}:${POM_VERSION} .
+            -t ${{ secrets.DOCKERHUB_USERNAME }}/${POM_ARTIFACT}:${POM_VERSION} . \
 
       - name: Push Docker image
         run: |
           echo ${{ secrets.DOCKERHUB_TOKEN }} | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ inputs.project-directory }}:${POM_VERSION}
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/${POM_ARTIFACT}:${POM_VERSION}
