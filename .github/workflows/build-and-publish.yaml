@@ -25,6 +25,10 @@ jobs:
         id: get_version
         run: echo "::set-output name=version::$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)"
 
+      - name: Build with Maven
+        working-directory: ${{ inputs.project-directory }}
+        run: mvn clean package
+
       - name: Get artifact id from pom.xml
         id: get_artifact_id
         run: echo "::set-output name=artifact_id::$(mvn help:evaluate -Dexpression=project.artifactId -q -DforceStdout)"
@@ -37,11 +41,6 @@ jobs:
 
       - name: Print version
         run: echo "$POM_ARTIFACT:$POM_VERSION"
-
-      - name: Build with Maven
-        working-directory: ${{ inputs.project-directory }}
-        run: mvn clean package
-
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
 
