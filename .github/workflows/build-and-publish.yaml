@@ -40,6 +40,7 @@ jobs:
 
       - name: Build Docker image
         run: |
+          cd ${{ inputs.project-directory }}
           docker build --file src/main/docker/Dockerfile.jvm \
             -t ${{ secrets.DOCKERHUB_USERNAME }}/${{ inputs.project-directory }}:${POM_VERSION} .
 
