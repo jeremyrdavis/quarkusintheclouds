@@ -27,17 +27,17 @@ jobs:
 
       - name: Get artifact id from pom.xml
         id: get_artifact_id
-        run: echo "POM_ARTIFACT=$(mvn help:evaluate -Dexpression=project.artifactId -q -DforceStdout)"  >> $GITHUB_OUTPUT
+        run: echo "POM_ARTIFACT=$(mvn help:evaluate -Dexpression=project.artifactId -q -DforceStdout)"  >> $GITHUB_STATE
 
       - name: Get version from pom.xml
         id: get_version
-        run: echo "POM_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_OUTPUT
+        run: echo "POM_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_STATE
 
       - name: Print GITHUB_OUTPUT
         run: |
           echo "POM_ARTIFACT=${{ steps.get_artifact_id.POM_ARTIFACT }}"
           echo "POM_VERSION=${{ steps.get_version.POM_VERSION }}"
-          echo $GITHUB_OUTPUT
+          echo $GITHUB_STATE
 
       - name: Print version
         run: echo ${{ secrets.DOCKERHUB_USERNAME }}"/${POM_ARTIFACT}:${POM_VERSION}"
