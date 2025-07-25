@@ -3,12 +3,11 @@ name: Build and Publish Backend
 on:
   push:
     paths:
-      - 'quarkus-affirmations-backend/**'
+      - "quarkus-affirmations-backend/**"
 
 jobs:
   call-build-and-publish:
     uses: ./.github/workflows/build-and-publish.yaml
     with:
       project-directory: quarkus-affirmations-backend
-      dockerfile-path: quarkus-affirmations-backend/src/main/docker/Dockerfile.jvm
-      dockerhub-username: ${{ secrets.DOCKERHUB_USERNAME }}
+    secrets: inherit
