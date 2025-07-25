@@ -27,11 +27,11 @@ jobs:
 
       - name: Get artifact id from pom.xml
         id: get_artifact_id
-        run: echo "POM_ARTIFACT=$(mvn help:evaluate -Dexpression=project.artifactId -q -DforceStdout)"  >> $GITHUB_STATE
+        run: echo "POM_ARTIFACT=$(mvn help:evaluate -Dexpression=project.artifactId -q -DforceStdout)"
 
       - name: Get version from pom.xml
         id: get_version
-        run: echo "POM_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_STATE
+        run: echo "POM_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)"
 
       - name: Print GITHUB_OUTPUT
         run: |
