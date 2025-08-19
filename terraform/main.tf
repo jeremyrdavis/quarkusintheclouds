@@ -20,6 +20,7 @@ terraform {
   }
 }
 
+
 # Configure the Microsoft Azure Provider
 provider "azurerm" {
   features {
@@ -32,6 +33,28 @@ provider "azurerm" {
     }
   }
   subscription_id = var.subscription_id
+}
+
+
+provider "kubernetes" {
+  host                   = module.aks.host
+  client_certificate     = base64decode(module.aks.client_certificate)
+  client_key             = base64decode(module.aks.client_key)
+  cluster_ca_certificate = base64decode(module.aks.cluster_ca_certificate)
+  username               = module.aks.cluster_username
+  password               = module.aks.cluster_password
+}
+
+module "k8s_app" {
+  source        = "./modules/k8s_app"
+  namespace     = "myapp"
+  back_image    = "nginx:1.25-alpine"   # Replace with your backend image
+  front_image   = "nginx:1.25-alpine"   # Replace with your frontend image
+  back_replicas = 2
+  front_replicas = 2
+  config_data   = {
+    SOME_KEY = "some_value"
+  }
 }
 
 resource "random_integer" "num" {
@@ -117,17 +140,17 @@ module "eventbus" {
   create_topic = true
 }
 
-module "aro" {
-  source = "./modules/aro"
-  location = var.location
-  resource_group_name = azurerm_resource_group.main.name
-  resource_group_id = azurerm_resource_group.main.id
-  random_num = random_integer.num.result
-  domain = var.aro_domain
-  pull_secret = var.aro_pull_secret
-  worker_node_count = var.aro_worker_node_count
-  master_vm_size = var.aro_master_vm_size
-  worker_vm_size = var.aro_worker_vm_size
-  tags = var.tags
-}
+# module "aro" {
+#   source = "./modules/aro"
+#   location = var.location
+#   resource_group_name = azurerm_resource_group.main.name
+#   resource_group_id = azurerm_resource_group.main.id
+#   random_num = random_integer.num.result
+#   domain = var.aro_domain
+#   pull_secret = var.aro_pull_secret
+#   worker_node_count = var.aro_worker_node_count
+#   master_vm_size = var.aro_master_vm_size
+#   worker_vm_size = var.aro_worker_vm_size
+#   tags = var.tags
+# }
 
