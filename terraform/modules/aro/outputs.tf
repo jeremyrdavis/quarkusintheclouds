@@ -45,4 +45,14 @@ output "cluster_info" {
     id   = azurerm_redhat_openshift_cluster.aro.id
     console_url = azurerm_redhat_openshift_cluster.aro.console_url
   }
+}
+
+output "workload_identity_id" {
+  description = "ID of the user-assigned managed identity for workloads"
+  value       = azurerm_user_assigned_identity.aro_workload_identity.id
+}
+
+output "workload_identity_client_id" {
+  description = "Client ID of the user-assigned managed identity for workloads"
+  value       = azurerm_user_assigned_identity.aro_workload_identity.client_id
 } 

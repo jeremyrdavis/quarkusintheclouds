@@ -59,4 +59,9 @@ variable "tags" {
   type        = map(string)
   description = "Tags to apply to the ARO cluster."
   default     = {}
+}
+
+variable "keyvault_identity_id" {
+  type        = string
+  description = "ID of the user-assigned managed identity for Key Vault access"
 } 

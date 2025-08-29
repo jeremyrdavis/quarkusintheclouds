@@ -45,3 +45,8 @@ variable "username" {
   description = "The admin username for the new cluster."
   default     = "azureadmin"
 }
+
+variable "keyvault_identity_id" {
+  type        = string
+  description = "ID of the user-assigned managed identity for Key Vault access"
+}

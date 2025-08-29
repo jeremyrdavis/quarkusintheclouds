@@ -50,6 +50,13 @@ resource "azurerm_role_assignment" "aro_contributor" {
   depends_on = [azuread_service_principal.aro_sp]
 }
 
+# Create user-assigned managed identity for workloads
+resource "azurerm_user_assigned_identity" "aro_workload_identity" {
+  name                = "aro-workload-identity-${var.random_num}"
+  location            = var.location
+  resource_group_name = var.resource_group_name
+}
+
 # Virtual Network for ARO
 resource "azurerm_virtual_network" "aro_vnet" {
   name                = "aro-vnet-${var.random_num}"

@@ -11,6 +11,10 @@ resource "azurerm_container_app" "frontend" {
   resource_group_name = var.resource_group_name
   revision_mode = "Single"
   
+  identity {
+    type         = "UserAssigned"
+    identity_ids = [var.keyvault_identity_id]
+  }
 
   template {
     container {
@@ -41,6 +45,11 @@ resource "azurerm_container_app" "backend" {
   container_app_environment_id = azurerm_container_app_environment.example.id
   resource_group_name = var.resource_group_name
   revision_mode = "Single"
+
+  identity {
+    type         = "UserAssigned"
+    identity_ids = [var.keyvault_identity_id]
+  }
 
   template {
     container {

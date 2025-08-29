@@ -26,7 +26,8 @@ resource "azurerm_kubernetes_cluster" "k8s" {
   dns_prefix          = "dns-${var.random_num}"
 
   identity {
-    type = "SystemAssigned"
+    type         = "UserAssigned"
+    identity_ids = [var.keyvault_identity_id]
   }
 
   default_node_pool {

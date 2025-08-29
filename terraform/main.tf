@@ -73,6 +73,16 @@ resource "azurerm_resource_group" "main" {
 
 data "azurerm_client_config" "current" {}
 
+# Managed Identity for Key Vault access
+module "managed_identity" {
+  source              = "./modules/managed_identity"
+  identity_name       = "qaz-keyvault-identity-${random_integer.num.result}"
+  resource_group_name = azurerm_resource_group.main.name
+  location            = var.location
+  key_vault_id        = module.keyvault.keyvault_id
+  tenant_id           = data.azurerm_client_config.current.tenant_id
+}
+
 module "aks" {
   source = "./modules/aks"
   subscription_id = data.azurerm_client_config.current.subscription_id
@@ -80,6 +90,7 @@ module "aks" {
   random_num = azurerm_resource_group.main.location
   resource_group_name = azurerm_resource_group.main.name
   resource_group_id = azurerm_resource_group.main.id
+  keyvault_identity_id = module.managed_identity.identity_id
 }
 
 module "appconfig" {
@@ -126,6 +137,7 @@ module "containerapps" {
   environment_name = "qaz-containerapps-${random_integer.num.result}"
   location = var.location
   resource_group_name = azurerm_resource_group.main.name
+  keyvault_identity_id = module.managed_identity.identity_id
 }
 
 module "eventbus" {
@@ -152,5 +164,14 @@ module "eventbus" {
 #   master_vm_size = var.aro_master_vm_size
 #   worker_vm_size = var.aro_worker_vm_size
 #   tags = var.tags
+#   keyvault_identity_id = module.managed_identity.identity_id
 # }
+
+module "functions" {
+  source = "./modules/functions"
+  resource_group_name = azurerm_resource_group.main.name
+  location = var.location
+  random_num = random_integer.num.result
+  keyvault_identity_id = module.managed_identity.identity_id
+}
 

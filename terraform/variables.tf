@@ -24,11 +24,11 @@ variable "aro_domain" {
   default     = "quarkusintheclouds"
 }
 
-variable "aro_pull_secret" {
-  description = "Red Hat pull secret for ARO cluster"
-  type        = string
-  sensitive   = true
-}
+# variable "aro_pull_secret" {
+#   description = "Red Hat pull secret for ARO cluster"
+#   type        = string
+#   sensitive   = true
+# }
 
 variable "aro_worker_node_count" {
   description = "Number of worker nodes for ARO cluster"
